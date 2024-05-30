@@ -27,11 +27,11 @@ public partial class OptionsWindow : PanelContainer
 
         _showNames = GetNode<CheckBox>("%ShowNames");
         _showNames.Connect("toggled", new Callable(this, nameof(OnShowNamesToggled)));
-        ShowNames = _showNames.Pressed;
+        ShowNames = _showNames.ButtonPressed;
 
         _showStands = GetNode<CheckBox>("%ShowStands");
         _showStands.Connect("toggled", new Callable(this, nameof(OnShowStandsToggled)));
-        ShowStands = _showStands.Pressed;
+        ShowStands = _showStands.ButtonPressed;
     }
 
     private void OnToggleButtonPressed()

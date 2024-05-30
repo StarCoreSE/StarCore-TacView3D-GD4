@@ -30,35 +30,35 @@ public partial class OrbitalCamera : Camera3D
 
     public override void _UnhandledInput(InputEvent @event)
     {
-        if (@event is InputEventMouseButton buttonEvent1 && buttonEvent1.ButtonIndex == (int)ButtonList.Right && buttonEvent1.Pressed)
+        if (@event is InputEventMouseButton buttonEvent1 && buttonEvent1.ButtonIndex == MouseButton.Right && buttonEvent1.Pressed)
         {
             Input.MouseMode = Input.MouseModeEnum.Captured;
         }
-        else if (@event is InputEventMouseButton buttonEvent2 && buttonEvent2.ButtonIndex == (int)ButtonList.Right && !buttonEvent2.Pressed)
+        else if (@event is InputEventMouseButton buttonEvent2 && buttonEvent2.ButtonIndex == MouseButton.Right && !buttonEvent2.Pressed)
         {
             Input.MouseMode = Input.MouseModeEnum.Visible;
         }
 
-        isDragging = Input.IsMouseButtonPressed((int)ButtonList.Right);
+        isDragging = Input.IsMouseButtonPressed(MouseButton.Right);
 
         if (@event is InputEventMouseButton buttonEvent)
         {
             float dynamicZoomSpeed = zoomSpeed * (distanceFromTarget / 10.0f);
 
-            switch ((ButtonList)buttonEvent.ButtonIndex)
+            switch (buttonEvent.ButtonIndex)
             {
-                case ButtonList.Right:
+                case MouseButton.Right:
                     isDragging = true;
                     break;
-                case ButtonList.WheelUp:
+                case MouseButton.WheelUp:
                     if (distanceFromTarget <= minDistanceFromTarget) break;
                     Translate(Vector3.Back * -dynamicZoomSpeed);
-                    distanceFromTarget = this.GlobalTransform.origin.DistanceTo(Pivot.GlobalTransform.origin);
+                    distanceFromTarget = this.GlobalTransform.Origin.DistanceTo(Pivot.GlobalTransform.Origin);
                     break;
-                case ButtonList.WheelDown:
+                case MouseButton.WheelDown:
                     if (distanceFromTarget >= maxDistanceFromTarget) break;
                     Translate(Vector3.Back * dynamicZoomSpeed);
-                    distanceFromTarget = this.GlobalTransform.origin.DistanceTo(Pivot.GlobalTransform.origin);
+                    distanceFromTarget = this.GlobalTransform.Origin.DistanceTo(Pivot.GlobalTransform.Origin);
                     break;
                 default:
                     break;
@@ -74,7 +74,7 @@ public partial class OrbitalCamera : Camera3D
 
         if (Input.IsActionJustPressed("ui_click_left"))
         {
-            Camera3D camera = GetViewport().GetCamera3d() as Camera3D;
+            Camera3D camera = GetViewport().GetCamera3D() as Camera3D;
             if (camera == null)
             {
                 GD.PrintErr("Error: Unable to get Camera3D from SubViewport.");
@@ -83,12 +83,11 @@ public partial class OrbitalCamera : Camera3D
 
             Vector3 rayOrigin = camera.ProjectRayOrigin(GetViewport().GetMousePosition());
             Vector3 rayNormal = camera.ProjectRayNormal(GetViewport().GetMousePosition());
-            PhysicsDirectSpaceState3D spaceState = GetWorld3d().DirectSpaceState;
-            var result = spaceState.IntersectRay(rayOrigin, rayOrigin + rayNormal * 100000, collideWithAreas: true);
+            PhysicsDirectSpaceState3D spaceState = GetWorld3D().DirectSpaceState;
+            var result = spaceState.IntersectRay(rayOrigin, rayOrigin + rayNormal * 100000, collisionMask: 1, collideWithBodies: true, collideWithAreas: true);
 
-            if (result != null)
+            if (result != null && result.ContainsKey("collider"))
             {
-                if (!result.Contains<>("collider")) return;
                 Node3D collider = (Node3D)result["collider"];
                 if (collider == null) return;
 
@@ -98,7 +97,7 @@ public partial class OrbitalCamera : Camera3D
         }
     }
 
-    public override void _Process(float delta)
+    public override void _Process(double delta)
     {
         RotateCamera();
 
@@ -110,7 +109,7 @@ public partial class OrbitalCamera : Camera3D
 
         if (TrackedSpatial != null)
         {
-            Pivot.Position = TrackedSpatial.GlobalTranslation;
+            Pivot.Position = TrackedSpatial.GlobalPosition;
         }
     }
 
@@ -118,13 +117,13 @@ public partial class OrbitalCamera : Camera3D
     {
         if (Input.MouseMode == Input.MouseModeEnum.Captured)
         {
-            rotationOffset.x += -_mouseDelta.y * sensitivity;
-            rotationOffset.y += -_mouseDelta.x * sensitivity;
+            rotationOffset.X += -_mouseDelta.Y * sensitivity;
+            rotationOffset.Y += -_mouseDelta.X * sensitivity;
             _mouseDelta = Vector2.Zero;
         }
 
         Pivot.RotationDegrees = Vector3.Zero;
-        Pivot.RotateX(rotationOffset.x);
-        Pivot.RotateY(rotationOffset.y);
+        Pivot.RotateX(rotationOffset.X);
+        Pivot.RotateY(rotationOffset.Y);
     }
 }

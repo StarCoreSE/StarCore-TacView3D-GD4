@@ -47,21 +47,21 @@ public partial class Marker : Node3D
 
         // Create a new BoxShape with the extents based on the volume dimensions
         var box = new BoxShape3D();
-        box.Extents = new Vector3(volume.Width, volume.Height, volume.Depth) * volume.GridSize / 2;
-        collision.Shape3D = box;
+        box.Size = new Vector3(volume.Width, volume.Height, volume.Depth) * volume.GridSize / 2;
+        collision.Shape = box;
 
-        _visual.Transform3D = new Transform3D(Basis.Identity, -volume.CenterOfMass);
+        _visual.Transform = new Transform3D(Basis.Identity, -volume.CenterOfMass);
         collision.Position = _visual.Position; //- (volume.GridSize * Vector3.One * 0.5f);
 
         // Create a CubeMesh for LOD visualization
         var cube = new BoxMesh();
-        cube.Size = box.Extents * 2.0f * BoundingBoxLodRatio;
+        cube.Size = box.Size * 2.0f * BoundingBoxLodRatio;
 
         // Set the mesh to the LOD node
         _lod.Mesh = cube;
 
         // Adjust the transform of the LOD node to center it around the volume's center of mass
-        _lod.Transform3D = new Transform3D(Basis.Identity, -volume.CenterOfMass);
+        _lod.Transform = new Transform3D(Basis.Identity, -volume.CenterOfMass);
     }
 
 
