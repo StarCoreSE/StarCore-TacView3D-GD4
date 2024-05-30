@@ -1,0 +1,66 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://Roboto-Regular.ttf" type="FontFile" id=1]
+[ext_resource path="res://Stand.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Marker.cs" type="Script" id=3]
+
+[sub_resource type="BoxMesh" id=9]
+
+[sub_resource type="BoxShape3D" id=1]
+extents = Vector3( 50, 50, 50 )
+
+[sub_resource type="BoxMesh" id=8]
+
+[sub_resource type="FontFile" id=4]
+size = 30
+outline_size = 1
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 1 )
+
+[sub_resource type="StandardMaterial3D" id=7]
+flags_transparent = true
+flags_unshaded = true
+flags_vertex_lighting = true
+flags_no_depth_test = true
+albedo_color = Color( 1, 0.811765, 0.243137, 0.717647 )
+
+[node name="Marker" type="Node3D"]
+script = ExtResource( 3 )
+
+[node name="Pivot" type="Node3D" parent="."]
+
+[node name="Volume" type="MeshInstance3D" parent="Pivot"]
+unique_name_in_owner = true
+mesh = SubResource( 9 )
+
+[node name="InteractionArea" type="Area3D" parent="Pivot"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Pivot/InteractionArea"]
+unique_name_in_owner = true
+shape = SubResource( 1 )
+
+[node name="LOD" type="MeshInstance3D" parent="Pivot"]
+unique_name_in_owner = true
+mesh = SubResource( 8 )
+
+[node name="Stand" parent="." instance=ExtResource( 2 )]
+unique_name_in_owner = true
+visible = false
+
+[node name="Label" type="Label3D" parent="."]
+unique_name_in_owner = true
+visible = false
+cast_shadow = 0
+pixel_size = 0.001
+billboard = 1
+double_sided = false
+no_depth_test = true
+fixed_size = true
+text = "Endeavor"
+font = SubResource( 4 )
+
+[node name="DebugCenter" type="CSGSphere3D" parent="."]
+visible = false
+radius = 1.25
+material = SubResource( 7 )

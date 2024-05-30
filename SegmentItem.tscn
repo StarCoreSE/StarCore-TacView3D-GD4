@@ -1,0 +1,17 @@
+[gd_scene format=2]
+
+[node name="SegmentItem" type="PanelContainer"]
+offset_right = 600.0
+offset_bottom = 28.0
+
+[node name="Container" type="VBoxContainer" parent="."]
+offset_left = 7.0
+offset_top = 7.0
+offset_right = 593.0
+offset_bottom = 21.0
+
+[node name="Label" type="Label" parent="Container"]
+offset_right = 586.0
+offset_bottom = 14.0
+text = "Hello world"
+clip_text = true
