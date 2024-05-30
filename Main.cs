@@ -130,7 +130,7 @@ public partial class Main : Node
         }
     }
 
-    public override void _Process(float delta)
+    public override void _Process(double d)
     {
         if (_recording != null && (_playbackWidget.IsPlaying || _playbackWidget.IsSliding))
         {

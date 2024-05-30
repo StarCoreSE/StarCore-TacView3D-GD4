@@ -82,11 +82,11 @@ public partial class InfoWindow : Container
                     Name = grid.EntityId,
                     Text = grid.Name, // Assuming grids have an EntityName property
                     Visible = shouldShowButton,
-                    Align = Button.TextAlign.Left
+                    Alignment = HorizontalAlignment.Left
                 };
-                newButton.SizeFlagsHorizontal = (int)SizeFlags.ExpandFill;
+                newButton.SizeFlagsHorizontal = SizeFlags.ExpandFill;
                 newButton.ClipText = true;
-                newButton.Connect("pressed", new Callable(this, nameof(OnButtonClicked)), new Godot.Collections.Array { newButton });
+                newButton.Connect("pressed", new Callable(this, nameof(OnButtonClicked)));
                 list.AddChild(newButton);
             }
         }
@@ -136,7 +136,7 @@ public partial class InfoWindow : Container
     {
         if (sender != null)
         {
-            var camera = GetViewport().GetCamera3d();
+            var camera = GetViewport().GetCamera3D();
             if (camera is OrbitalCamera orbitalCamera)
             {
                 if (_gridDictionary.TryGetValue(sender.Name, out var grid) && _recording != null)

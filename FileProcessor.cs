@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Godot;
+using FileAccess = Godot.FileAccess;
 
-public partial class FileProcessor
+public partial class FileProcessor : Node
 {
     private readonly string filename;
-    private long lastPosition;
+    private ulong lastPosition;
 
     public FileProcessor(string filename)
     {
@@ -40,12 +41,13 @@ public partial class FileProcessor
         return segments;
     }
 
-    private async Task ReadFromFileAsync(List<Segment> segments, long startPosition, bool skipHeader)
+    private async Task ReadFromFileAsync(List<Segment> segments, ulong startPosition, bool skipHeader)
     {
-        using (var stream = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+        using (var file = FileAccess.Open(filename, FileAccess.ModeFlags.Read))
         {
-            stream.Seek(startPosition, SeekOrigin.Begin);
-            using (var reader = new StreamReader(stream))
+            file.Seek(startPosition);
+
+            using (var reader = new StreamReader(new MemoryStream(file.GetBuffer((long)file.GetLength()))))
             {
                 string line;
                 if (skipHeader)
@@ -60,10 +62,10 @@ public partial class FileProcessor
                     for (int i = 0; i < expectedHeaders.Count; i++)
                     {
                         line = await reader.ReadLineAsync();
-                        //if (line != expectedHeaders[i])
-                        //{
-                        //    GD.PrintErr($"Error: expected '{expectedHeaders[i]}', got '{line}'");
-                        //}
+                        if (line != expectedHeaders[i])
+                        {
+                            GD.PrintErr($"Error: expected '{expectedHeaders[i]}', got '{line}'");
+                        }
                     }
                 }
 
@@ -84,7 +86,7 @@ public partial class FileProcessor
                 {
                     segments.Add(segment);
                 }
-                lastPosition = stream.Position;
+                lastPosition = file.GetPosition();
             }
         }
     }

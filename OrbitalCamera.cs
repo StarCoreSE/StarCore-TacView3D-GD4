@@ -1,3 +1,4 @@
+using System.Linq;
 using Godot;
 
 public partial class OrbitalCamera : Camera3D
@@ -87,8 +88,8 @@ public partial class OrbitalCamera : Camera3D
 
             if (result != null)
             {
-                if (!result.Contains("collider")) return;
-                Node3D collider = result["collider"] as Node3D;
+                if (!result.Contains<>("collider")) return;
+                Node3D collider = (Node3D)result["collider"];
                 if (collider == null) return;
 
                 GD.Print("3D object under cursor:", collider);

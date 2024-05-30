@@ -131,7 +131,7 @@ public partial class FileReader : Node
         }
     }
 
-    public override void _Process(float delta)
+    public override void _Process(double d)
     {
         // Continue processing segments if there are any
         if (segmentQueue.Count > 0)

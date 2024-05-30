@@ -96,21 +96,21 @@ public partial class Marker : Node3D
             return;
         }
 
-        _camera = GetViewport().GetCamera3d();
+        _camera = GetViewport().GetCamera3D();
         if (_camera == null)
         {
             GD.PrintErr("Camera3D node not found");
         }
     }
 
-    public override void _Process(float delta)
+    public override void _Process(double d)
     {
         if (!Visible) return;
 
         float distanceToCamera = 100.0f;
         if (_camera != null)
         {
-            distanceToCamera = GlobalTransform.origin.DistanceTo(_camera.GlobalTransform.origin);
+            distanceToCamera = GlobalTransform.Origin.DistanceTo(_camera.GlobalTransform.Origin);
         }
         if (float.IsNaN(distanceToCamera) || float.IsInfinity(distanceToCamera))
         {
