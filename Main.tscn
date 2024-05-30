@@ -107,7 +107,6 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 0.819342, 0.573305, 0, -0.573305, 0.819342, 0, 0, 5)
 current = true
-fov = 30.0
 near = 10.0
 far = 50000.0
 script = ExtResource("3")
