@@ -16,7 +16,7 @@ public partial class Main : Node
     [Export] public PackedScene MarkerBlueprint;
     [Export] public StandardMaterial3D MarkerMaterialBase;
     [Export] public Color NeutralColor;
-    
+
     public override void _Ready()
     {
         GetTree().Connect("files_dropped", new Callable(this, nameof(GetDroppedFilesPath)));
@@ -34,7 +34,7 @@ public partial class Main : Node
             GD.PrintErr("Error: InfoWindow not found.");
             return;
         }
-        
+
         _optionsWindow = GetNode<OptionsWindow>("%OptionsWindow");
         if (_optionsWindow == null)
         {
@@ -136,7 +136,7 @@ public partial class Main : Node
         {
             if (!_playbackWidget.IsSliding)
             {
-                _recording.MaybeReadNextSegmentFromFile(delta);
+                _recording.MaybeReadNextSegmentFromFile((float)d);
             }
             _recording.Refresh();
         }
