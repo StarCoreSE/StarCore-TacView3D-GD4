@@ -19,7 +19,7 @@ public partial class InfoWindow : Container
         }
         else
         {
-            _search.Connect("text_changed", new Callable(this, nameof(OnSearchFilterChanged)));
+            _search.TextChanged += OnSearchFilterChanged;
         }
     }
 
@@ -86,7 +86,7 @@ public partial class InfoWindow : Container
                 };
                 newButton.SizeFlagsHorizontal = SizeFlags.ExpandFill;
                 newButton.ClipText = true;
-                newButton.Connect("pressed", new Callable(this, nameof(OnButtonClicked)));
+                newButton.Pressed += () => OnButtonClicked(newButton);
                 list.AddChild(newButton);
             }
         }

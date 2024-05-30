@@ -15,7 +15,7 @@ public partial class LoadingDialog : PanelContainer
         _progress = GetNode<ProgressBar>("%ProgressBar");
         _title = GetNode<Label>("%Title");
 
-        _cancel.Connect("button_down", new Callable(this, nameof(OnCancel)));
+        _cancel.ButtonDown += OnCancel;
     }
 
     private void OnCancel()

@@ -22,7 +22,7 @@ public partial class Main : Node
     public override void _Ready()
     {
         // Connect the "files_dropped" signal to the custom handler
-        Connect("files_dropped", new Callable(this, nameof(OnFilesDropped)));
+        GetTree().Root.FilesDropped += OnFilesDropped;
 
         _playbackWidget = GetNode<PlaybackWidget>("%PlaybackWidget");
         if (_playbackWidget == null)
@@ -51,7 +51,7 @@ public partial class Main : Node
         }
     }
 
-    private async void OnFilesDropped(string[] files, int screen)
+    private async void OnFilesDropped(string[] files)
     {
         // Cancel any ongoing operation before starting a new one
         _cancellationTokenSource?.Cancel();

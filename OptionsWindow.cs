@@ -23,14 +23,14 @@ public partial class OptionsWindow : PanelContainer
         GD.Print($"title   size {_titlebar.Size}");
         GD.Print($"content size {_content.Size}");
 
-        _toggleButton.Connect("pressed", new Callable(this, nameof(OnToggleButtonPressed)));
+        _toggleButton.Pressed += OnToggleButtonPressed;
 
         _showNames = GetNode<CheckBox>("%ShowNames");
-        _showNames.Connect("toggled", new Callable(this, nameof(OnShowNamesToggled)));
+        _showNames.Toggled += OnShowNamesToggled;
         ShowNames = _showNames.ButtonPressed;
 
         _showStands = GetNode<CheckBox>("%ShowStands");
-        _showStands.Connect("toggled", new Callable(this, nameof(OnShowStandsToggled)));
+        _showStands.Toggled += OnShowStandsToggled;
         ShowStands = _showStands.ButtonPressed;
     }
 
