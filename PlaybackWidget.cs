@@ -17,7 +17,6 @@ public partial class PlaybackWidget : PanelContainer
 
     public HSlider SliderScrubber;
 
-
     public OptionButton SpeedDropdown;
 
     public int SpeedIndex = 2;
@@ -54,7 +53,7 @@ public partial class PlaybackWidget : PanelContainer
 
     public override void _Ready()
     {
-        SliderScrubber = GetNode("%SliderScrubber") as HSlider;
+        SliderScrubber = GetNode<HSlider>("%SliderScrubber");
         if (SliderScrubber == null)
         {
             GD.PrintErr("Error: SliderScrubber not found.");
@@ -65,7 +64,7 @@ public partial class PlaybackWidget : PanelContainer
         SliderScrubber.Connect("drag_ended", new Callable(this, nameof(OnSliderDragEnded)));
         SliderScrubber.Connect("value_changed", new Callable(this, nameof(OnSliderValueChanged)));
 
-        _playButton = GetNode("%PlayButton") as PlayButton;
+        _playButton = GetNode<PlayButton>("%PlayButton");
         if (_playButton == null)
         {
             GD.PrintErr("Error: PlayButton not found.");
@@ -74,7 +73,7 @@ public partial class PlaybackWidget : PanelContainer
 
         _playButton.Connect("pressed", new Callable(this, nameof(OnPlayButtonPressed)));
 
-        SpeedDropdown = GetNode("%SpeedDropdown") as OptionButton;
+        SpeedDropdown = GetNode<OptionButton>("%SpeedDropdown");
         if (SpeedDropdown == null)
         {
             GD.PrintErr("Error: SpeedDropdown not found.");
@@ -87,7 +86,7 @@ public partial class PlaybackWidget : PanelContainer
         SpeedDropdown.Selected = 2;
         SpeedDropdown.Connect("item_selected", new Callable(this, nameof(OnSpeedDropdownItemSelected)));
 
-        TimeLabel = GetNode("%TimeLabel") as Label;
+        TimeLabel = GetNode<Label>("%TimeLabel");
         if (TimeLabel == null)
         {
             GD.PrintErr("Error: TimeLabel not found.");
@@ -98,7 +97,7 @@ public partial class PlaybackWidget : PanelContainer
         _playButton.Disabled = true;
     }
 
-    public override void _Process(float delta)
+    public override void _Process(double delta)
     {
         if (_frameCount > 0)
         {
@@ -107,7 +106,7 @@ public partial class PlaybackWidget : PanelContainer
                                  SecondsToTime(_frameCount);
             if (IsPlaying && !IsSliding)
             {
-                _scrubber += delta / (_frameCount / SpeedMultipliers[SpeedIndex]);
+                _scrubber += (float)(delta / (_frameCount / SpeedMultipliers[SpeedIndex]));
                 SliderScrubber.Value = _scrubber * 100;
             }
 
@@ -118,12 +117,12 @@ public partial class PlaybackWidget : PanelContainer
 
         if (IsStreaming)
         {
-            var si = GetNode("%StreamingIndicator") as CanvasItem;
+            var si = GetNode<CanvasItem>("%StreamingIndicator");
             si.Modulate = Color.FromHsv(0f, .9f, .8f);
         }
         else
         {
-            var si = GetNode("%StreamingIndicator") as CanvasItem;
+            var si = GetNode<CanvasItem>("%StreamingIndicator");
             si.Modulate = Color.FromHsv(0f, .0f, .7f);
         }
     }
@@ -137,7 +136,7 @@ public partial class PlaybackWidget : PanelContainer
 
         var frameCount = recording.Frames.Count;
         _setScrubber = recording.SetScrubber;
-        
+
         _scrubber = 0;
         _setScrubber(_scrubber);
         _frameCount = frameCount;

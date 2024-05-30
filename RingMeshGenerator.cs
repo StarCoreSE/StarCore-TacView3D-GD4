@@ -21,12 +21,12 @@ public partial class RingMeshGenerator : MeshInstance3D
     public override void _Ready()
     {
         base._Ready();
-        _camera = GetViewport().GetCamera3d();
+        _camera = GetViewport().GetCamera3D();
         GenerateRingMesh();
         StorePreviousValues();
     }
 
-    public override void _Process(float delta)
+    public override void _Process(double delta)
     {
         base._Process(delta);
 
@@ -44,7 +44,7 @@ public partial class RingMeshGenerator : MeshInstance3D
 
     private void UpdateThicknessBasedOnDistance()
     {
-        float distance = GlobalTransform.origin.DistanceTo(_camera.GlobalTransform.origin);
+        float distance = GlobalTransform.Origin.DistanceTo(_camera.GlobalTransform.Origin);
         Thickness = FixedSize * distance;
     }
 
@@ -106,8 +106,8 @@ public partial class RingMeshGenerator : MeshInstance3D
         st.Begin(Mesh.PrimitiveType.Triangles);
         for (int i = 0; i < vertices.Length; i++)
         {
-            st.AddNormal(normals[i]);
-            st.AddUv(uvs[i]);
+            st.SetNormal(normals[i]);
+            st.SetUV(uvs[i]);
             st.AddVertex(vertices[i]);
         }
         for (int i = 0; i < indices.Length; i++)

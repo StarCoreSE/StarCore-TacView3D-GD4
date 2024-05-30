@@ -3,6 +3,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Godot;
+
 public partial class Main : Node
 {
     private PlaybackWidget _playbackWidget;
@@ -16,10 +17,12 @@ public partial class Main : Node
     [Export] public PackedScene MarkerBlueprint;
     [Export] public StandardMaterial3D MarkerMaterialBase;
     [Export] public Color NeutralColor;
+    public delegate void FilesDropped(string[] files);
 
     public override void _Ready()
     {
-        GetTree().Connect("files_dropped", new Callable(this, nameof(GetDroppedFilesPath)));
+        // Connect the "files_dropped" signal to the custom handler
+        Connect("files_dropped", new Callable(this, nameof(OnFilesDropped)));
 
         _playbackWidget = GetNode<PlaybackWidget>("%PlaybackWidget");
         if (_playbackWidget == null)
@@ -48,7 +51,7 @@ public partial class Main : Node
         }
     }
 
-    public async void GetDroppedFilesPath(string[] files, int screen)
+    private async void OnFilesDropped(string[] files, int screen)
     {
         // Cancel any ongoing operation before starting a new one
         _cancellationTokenSource?.Cancel();

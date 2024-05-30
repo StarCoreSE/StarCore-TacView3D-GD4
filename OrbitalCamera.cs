@@ -74,7 +74,7 @@ public partial class OrbitalCamera : Camera3D
 
         if (Input.IsActionJustPressed("ui_click_left"))
         {
-            Camera3D camera = GetViewport().GetCamera3D() as Camera3D;
+            Camera3D camera = GetViewport().GetCamera3D();
             if (camera == null)
             {
                 GD.PrintErr("Error: Unable to get Camera3D from SubViewport.");
@@ -84,7 +84,17 @@ public partial class OrbitalCamera : Camera3D
             Vector3 rayOrigin = camera.ProjectRayOrigin(GetViewport().GetMousePosition());
             Vector3 rayNormal = camera.ProjectRayNormal(GetViewport().GetMousePosition());
             PhysicsDirectSpaceState3D spaceState = GetWorld3D().DirectSpaceState;
-            var result = spaceState.IntersectRay(rayOrigin, rayOrigin + rayNormal * 100000, collisionMask: 1, collideWithBodies: true, collideWithAreas: true);
+
+            var parameters = new PhysicsRayQueryParameters3D
+            {
+                From = rayOrigin,
+                To = rayOrigin + rayNormal * 100000,
+                CollisionMask = 1,
+                CollideWithBodies = true,
+                CollideWithAreas = true
+            };
+
+            var result = spaceState.IntersectRay(parameters);
 
             if (result != null && result.ContainsKey("collider"))
             {

@@ -1,14 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Godot;
-using static Main;
 
 public partial class Recording : Node
 {
-    private File _file = new File();
+    private FileAccess _file;
     private Dictionary<string, Marker> Markers = new Dictionary<string, Marker>();
     private Dictionary<string, Volume> GridVolumes = new Dictionary<string, Volume>();
     public Dictionary<string, StandardMaterial3D> FactionColors = new Dictionary<string, StandardMaterial3D>();
@@ -55,10 +53,10 @@ public partial class Recording : Node
     private LoadingDialog _loadingDialog;
 
     public void Deinit()
-	{
+    {
         GD.Print("Deinit called");
 
-        _file.Close();
+        _file?.Close();
 
         FactionColors.Clear();
 
@@ -86,11 +84,11 @@ public partial class Recording : Node
 
     private void LoadFile(string filename, LoadingDialog loadingDialog = null)
     {
-        _file.Open(filename, File.ModeFlags.Read);
+        _file = FileAccess.Open(filename, FileAccess.ModeFlags.Read);
         var content = _file.GetAsText();
-        _previousFileLength = _file.GetLength();
+        _previousFileLength = (ulong)_file.GetLength();
         _lineNumber = 1;
-        
+
         if (loadingDialog != null)
         {
             _loadingDialog = loadingDialog;
@@ -187,7 +185,7 @@ public partial class Recording : Node
             }
             else
             {
-                marker = MarkerBlueprint.Instance<Marker>();
+                marker = MarkerBlueprint.Instantiate<Marker>();
                 if (marker == null)
                 {
                     GD.PrintErr($"Failed to instantiate marker for grid.EntityId {grid.EntityId}");
@@ -199,7 +197,7 @@ public partial class Recording : Node
                 if (!FactionColors.ContainsKey(grid.Faction))
                 {
                     var material = MarkerMaterialBase.Duplicate() as StandardMaterial3D;
-                    material.AlbedoColor = grid.Faction == "Unowned" ? NeutralColor : Color.FromHsv(grid.FactionColor.x, 0.95f, 0.2f);
+                    material.AlbedoColor = grid.Faction == "Unowned" ? NeutralColor : Color.FromHsv(grid.FactionColor.X, 0.95f, 0.2f);
                     FactionColors.Add(grid.Faction, material);
                 }
 
@@ -240,10 +238,10 @@ public partial class Recording : Node
     public void MaybeReadNextSegmentFromFile(float delta)
     {
         _secondsSinceLastReadAttempt += delta;
-        if (_file.IsOpen() && _secondsSinceLastReadAttempt > 0.050f && _previousFileLength != _file.GetLength())
+        if (_file.IsOpen() && _secondsSinceLastReadAttempt > 0.050f && _previousFileLength != (ulong)_file.GetLength())
         {
-            _file.Seek((long)_previousFileLength);
-            _previousFileLength = _file.GetLength();
+            _file.Seek((ulong)_previousFileLength);
+            _previousFileLength = (ulong)_file.GetLength();
 
             _secondsSinceLastReadAttempt = 0;
 
@@ -339,8 +337,8 @@ public partial class Recording : Node
         }
 
 
-            // Parse the last segment if any
-            if (segment.Count > 0)
+        // Parse the last segment if any
+        if (segment.Count > 0)
         {
             ParseSegment(segment.ToArray(), ref blocks, columnHeaders);
         }
@@ -697,7 +695,7 @@ public partial class Recording : Node
         }
     }
 
-    
+
 
     public Marker MarkerFromGrid(Grid grid)
     {

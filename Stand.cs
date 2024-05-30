@@ -32,23 +32,23 @@ public partial class Stand : Node3D
             QueueFree();
         }
 
-        _camera = GetViewport().GetCamera3d();
+        _camera = GetViewport().GetCamera3D();
         if (_camera == null)
         {
             GD.PrintErr("Camera3D node not found");
         }
     }
 
-    public override void _Process(float delta)
+    public override void _Process(double delta)
     {
         if (_parent != null && _line != null && _baseMarker != null)
         {
             // Get parent's global transform
             Transform3D parentTransform = _parent.GlobalTransform;
-            Vector3 parentPos = parentTransform.origin;
+            Vector3 parentPos = parentTransform.Origin;
 
             // Calculate the height between the parent and Y=0
-            float height = Math.Abs(parentPos.y);
+            float height = Math.Abs(parentPos.Y);
             if (height < 0.01f)
             {
                 height = 0.01f; // Prevent zero height to avoid zero determinant
@@ -58,7 +58,7 @@ public partial class Stand : Node3D
             float distanceToCamera = 100.0f;
             if (_camera != null)
             {
-                distanceToCamera = GlobalTransform.origin.DistanceTo(_camera.GlobalTransform.origin);
+                distanceToCamera = GlobalTransform.Origin.DistanceTo(_camera.GlobalTransform.Origin);
             }
             if (float.IsNaN(distanceToCamera) || float.IsInfinity(distanceToCamera))
             {
@@ -67,16 +67,16 @@ public partial class Stand : Node3D
             }
             float scaledFactor = distanceToCamera * LineThicknessScalar;
             Vector3 currentScale = _line.Scale;
-            _line.Scale = new Vector3(scaledFactor, height, currentScale.z);
+            _line.Scale = new Vector3(scaledFactor, height, currentScale.Z);
             
             // Adjust the offset to ensure the Line is correctly positioned
-            var textureHeight = _line.Texture2D.GetHeight();
+            var textureHeight = _line.Texture.GetHeight();
             _line.PixelSize = 1.0f / textureHeight;
-            _line.Offset = new Vector2(0, textureHeight / 2.0f * -(float)Math.Sign(parentPos.y));
+            _line.Offset = new Vector2(0, textureHeight / 2.0f * -(float)Math.Sign(parentPos.Y));
             _line.Modulate = Modulate;
 
             // Position the Base marker at the parent's X and Z, but at Y=0 without changing its rotation
-            Vector3 baseMarkerPos = new Vector3(parentPos.x, 0, parentPos.z);
+            Vector3 baseMarkerPos = new Vector3(parentPos.X, 0, parentPos.Z);
             Transform3D baseMarkerTransform = new Transform3D(Basis.Identity, baseMarkerPos);
             scaledFactor = Math.Max(scaledFactor, 1.0f);
             _baseMarker.Scale = new Vector3(scaledFactor, 1.0f, scaledFactor);
