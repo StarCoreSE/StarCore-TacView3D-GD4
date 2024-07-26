@@ -8,7 +8,7 @@
 [ext_resource type="FontFile" uid="uid://cekcaki0htdu5" path="res://Roboto-Regular.ttf" id="6"]
 [ext_resource type="PackedScene" path="res://LoadingDialog.tscn" id="7"]
 [ext_resource type="Material" path="res://MarkerMaterial.tres" id="9"]
-[ext_resource type="PackedScene" path="res://Marker.tscn" id="11"]
+[ext_resource type="PackedScene" uid="uid://bhvu61tye4upu" path="res://Marker.tscn" id="11"]
 [ext_resource type="PackedScene" path="res://OptionsWindow.tscn" id="12"]
 
 [sub_resource type="FontFile" id="3"]
@@ -28,7 +28,8 @@ size = Vector2(100000, 100000)
 
 [sub_resource type="Environment" id="1"]
 background_mode = 1
-background_color = Color(0.0117647, 0.0196078, 0.0745098, 1)
+background_color = Color(0.204196, 0.239014, 0.193522, 1)
+background_energy_multiplier = 1.17
 ambient_light_color = Color(1, 1, 1, 1)
 ambient_light_sky_contribution = 0.0
 glow_enabled = true

@@ -1,10 +1,10 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=3 format=3 uid="uid://bxdmj2njevhf6"]
 
-[ext_resource path="res://MarkerMaterial.tres" type="Material" id=1]
+[ext_resource type="Material" path="res://MarkerMaterial.tres" id="1"]
 
-[sub_resource type="BoxMesh" id=1]
-material = ExtResource( 1 )
-size = Vector3( 2.5, 2.5, 2.5 )
+[sub_resource type="BoxMesh" id="1"]
+material = ExtResource("1")
+size = Vector3(2.5, 2.5, 2.5)
 
 [node name="Cube" type="MeshInstance3D"]
-mesh = SubResource( 1 )
+mesh = SubResource("1")
