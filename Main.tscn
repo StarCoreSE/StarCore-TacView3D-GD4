@@ -28,7 +28,7 @@ size = Vector2(100000, 100000)
 
 [sub_resource type="Environment" id="1"]
 background_mode = 1
-background_color = Color(0.204196, 0.239014, 0.193522, 1)
+background_color = Color(0.205637, 0.200793, 0.195215, 1)
 background_energy_multiplier = 1.17
 ambient_light_color = Color(1, 1, 1, 1)
 ambient_light_sky_contribution = 0.0
